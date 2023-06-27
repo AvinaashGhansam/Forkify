@@ -3,6 +3,8 @@ import Fraction from "fractional";
 class RecipeView {
   #parentElement = document.querySelector(".recipe");
   #data;
+  #errorMessage = "Could not find a recipe :(";
+  #message = "";
 
   render(data) {
     this.#data = data;
@@ -15,7 +17,7 @@ class RecipeView {
     this.#parentElement.innerHTML = "";
   }
 
-  renderSpinner = function () {
+  renderSpinner() {
     // TODO: Render Spinner does not work as intended
     const markUp = `
     <div class="spinner">
@@ -24,9 +26,37 @@ class RecipeView {
       </svg>
     </div>
     `;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML("afterbegin", markUp);
+  }
+
+  renderError(message = this.#errorMessage) {
+    const markUp = `
+     <div class="error">
+     <div>
+      <svg>
+        <use href="${icons}#icon-alert-triangle"></use>
+      </svg>
+    </div>
+       <p>${message}</p>
+     </div>`;
     this.#parentElement.innerHTML = "";
     this.#parentElement.insertAdjacentHTML("afterbegin", markUp);
-  };
+  }
+
+  renderMessage(message = this.#message) {
+    const markUp = `
+     <div class="message">
+     <div>
+      <svg>
+        <use href="${icons}#icon-alert-triangle"></use>
+      </svg>
+    </div>
+       <p>${message}</p>
+     </div>`;
+    this.#parentElement.innerHTML = "";
+    this.#parentElement.insertAdjacentHTML("afterbegin", markUp);
+  }
 
   #generateMarkup() {
     return `         
@@ -123,6 +153,9 @@ class RecipeView {
    </div>
   
 `;
+  }
+  addHandlerRender(handler) {
+    ["hashchange", "load"].forEach(e => window.addEventListener(e, handler));
   }
 
   #generatedMarkupIngredient(ing) {

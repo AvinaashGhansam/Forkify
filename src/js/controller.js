@@ -1,12 +1,10 @@
 import * as model from "./model.js";
 import recipeView from "./views/recipeView.js";
-
+import searchView from "./views/searchView.js";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 
 // console.log(icons);
-
-const recipeContainer = document.querySelector(".recipe");
 
 // https://forkify-api.herokuapp.com/v2
 // API KEY e5c9320d-4066-4fe6-ae92-47e7c81a1830
@@ -25,15 +23,29 @@ const controllerRecipe = async function () {
     // 2) Render recipe
     recipeView.render(model.state.recipe);
   } catch (err) {
+    recipeView.renderError();
+  }
+};
+
+const controlSearchResult = async function () {
+  try {
+    // 1) Get search query
+    const query = searchView.getQuery();
+    if (!query) return;
+
+    // 2) Load search results
+    await model.loadSearchResult("pizza");
+
+    // 3) render results
+    console.log(model.state.search.result);
+  } catch (err) {
     console.log(err.toString());
   }
 };
 
-console.log("TEST");
-controllerRecipe();
-/**
- * Add an event listener to get a link to the current search
- */
-["hashchange", "load"].forEach(e =>
-  window.addEventListener(e, controllerRecipe)
-);
+const init = function () {
+  recipeView.addHandlerRender(controllerRecipe);
+  searchView.addHandlerSearch(controlSearchResult);
+};
+
+init();
