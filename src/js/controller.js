@@ -1,6 +1,8 @@
 import * as model from "./model.js";
 import recipeView from "./views/recipeView.js";
 import searchView from "./views/searchView.js";
+import resultsView from "./views/resultsView.js";
+
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 
@@ -29,6 +31,8 @@ const controllerRecipe = async function () {
 
 const controlSearchResult = async function () {
   try {
+    resultsView.renderSpinner();
+    console.log(resultsView.renderSpinner());
     // 1) Get search query
     const query = searchView.getQuery();
     if (!query) return;
@@ -38,6 +42,7 @@ const controlSearchResult = async function () {
 
     // 3) render results
     console.log(model.state.search.result);
+    resultsView.render(model.state.search.result);
   } catch (err) {
     console.log(err.toString());
   }
@@ -47,5 +52,6 @@ const init = function () {
   recipeView.addHandlerRender(controllerRecipe);
   searchView.addHandlerSearch(controlSearchResult);
 };
-
 init();
+
+// TODO: finish preview logic setup lesson 297 time 17:58
