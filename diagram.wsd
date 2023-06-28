@@ -1,0 +1,29 @@
+@startuml
+skinparam componentStyle uml2
+
+rectangle "User" as User
+
+rectangle "Controller" as Controller {
+  User --> Controller : User input
+  Controller --> Model : Update data
+  Controller --> View : Update view
+}
+
+rectangle "Model" as Model {
+  Controller --> Model : Request data
+  Model --> Controller : Send data
+}
+
+rectangle "View" as View {
+  Model --> View : Send data
+  View --> Controller : User interaction
+}
+
+rectangle "User Interface" as UserInterface {
+  View --> UserInterface : Display data
+  UserInterface --> View : User input
+}
+
+User --> UserInterface : Interact with User Interface
+
+@enduml
